@@ -22,10 +22,10 @@ func qemu_max_core_pwr_dwn
 	 * Flush L1 cache to L2.
 	 * ---------------------------------------------
 	 */
-	mov	x18, lr
+	mov	x18, x30
 	mov	x0, #DCCISW
 	bl	dcsw_op_level1
-	mov	lr, x18
+	mov	x30, x18
 	ret
 endfunc qemu_max_core_pwr_dwn
 
