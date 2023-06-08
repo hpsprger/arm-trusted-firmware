@@ -310,7 +310,7 @@
 		_init_memory, _init_c_runtime, _exception_vectors,	\
 		_pie_fixup_size
 
-	.if \_init_sctlr
+	.if \_init_sctlr /* _init_sctlr == 1 */
 		/* -------------------------------------------------------------
 		 * This is the initialisation of SCTLR_EL3 and so must ensure
 		 * that all fields are explicitly set rather than relying on hw.
@@ -340,11 +340,11 @@
 		isb
 	.endif /* _init_sctlr */
 
-#if DISABLE_MTPMU
+#if DISABLE_MTPMU  /* 整体条件 == 0 */
 		bl	mtpmu_disable
 #endif
 
-	.if \_warm_boot_mailbox
+	.if \_warm_boot_mailbox  /* _warm_boot_mailbox 为 1 */
 		/* -------------------------------------------------------------
 		 * This code will be executed for both warm and cold resets.
 		 * Now is the time to distinguish between the two.
@@ -359,8 +359,8 @@
 	do_cold_boot:
 	.endif /* _warm_boot_mailbox */
 
-	.if \_pie_fixup_size
-#if ENABLE_PIE
+	.if \_pie_fixup_size  /* _pie_fixup_size == 1 */
+#if ENABLE_PIE  /* ENABLE_PIE == 0 */
 		/*
 		 * ------------------------------------------------------------
 		 * If PIE is enabled fixup the Global descriptor Table only
@@ -387,7 +387,7 @@
 	msr	vbar_el3, x0
 	isb
 
-#if !(defined(IMAGE_BL2) && ENABLE_RME)
+#if !(defined(IMAGE_BL2) && ENABLE_RME) /* 整体条件  == 1 */
 	/* ---------------------------------------------------------------------
 	 * It is a cold boot.
 	 * Perform any processor specific actions upon reset e.g. cache, TLB
@@ -399,7 +399,7 @@
 
 	el3_arch_init_common
 
-	.if \_secondary_cold_boot
+	.if \_secondary_cold_boot  /* _secondary_cold_boot 为 1 */
 		/* -------------------------------------------------------------
 		 * Check if this is a primary or secondary CPU cold boot.
 		 * The primary CPU will set up the platform while the
@@ -425,7 +425,7 @@
 	 * ---------------------------------------------------------------------
 	 */
 
-	.if \_init_memory
+	.if \_init_memory   /* _init_memory == 1 */
 		bl	platform_mem_init
 	.endif /* _init_memory */
 
@@ -437,9 +437,9 @@
 	 *   - Relocate the data section from ROM to RAM, if required.
 	 * ---------------------------------------------------------------------
 	 */
-	.if \_init_c_runtime
+	.if \_init_c_runtime  /* _init_c_runtime == 1 */
 #if defined(IMAGE_BL31) || (defined(IMAGE_BL2) && \
-	((RESET_TO_BL2 && BL2_INV_DCACHE) || ENABLE_RME))
+	((RESET_TO_BL2 && BL2_INV_DCACHE) || ENABLE_RME))  /* 条件 == 1 */
 		/* -------------------------------------------------------------
 		 * Invalidate the RW memory used by the BL31 image. This
 		 * includes the data and NOBITS sections. This is done to
@@ -451,7 +451,7 @@
 		 * the entire image region if PIE is enabled.
 		 * -------------------------------------------------------------
 		 */
-#if ENABLE_PIE
+#if ENABLE_PIE  /* ENABLE_PIE == 0 */
 #if SEPARATE_CODE_AND_RODATA
 		adrp	x0, __TEXT_START__
 		add	x0, x0, :lo12:__TEXT_START__
@@ -459,7 +459,7 @@
 		adrp	x0, __RO_START__
 		add	x0, x0, :lo12:__RO_START__
 #endif /* SEPARATE_CODE_AND_RODATA */
-#else
+#else  /* 走这个分支 */
 		adrp	x0, __RW_START__
 		add	x0, x0, :lo12:__RW_START__
 #endif /* ENABLE_PIE */
@@ -467,7 +467,7 @@
 		add	x1, x1, :lo12:__RW_END__
 		sub	x1, x1, x0
 		bl	inv_dcache_range
-#if defined(IMAGE_BL31) && SEPARATE_NOBITS_REGION
+#if defined(IMAGE_BL31) && SEPARATE_NOBITS_REGION  /* 整体条件 为 0 */
 		adrp	x0, __NOBITS_START__
 		add	x0, x0, :lo12:__NOBITS_START__
 		adrp	x1, __NOBITS_END__
@@ -475,7 +475,7 @@
 		sub	x1, x1, x0
 		bl	inv_dcache_range
 #endif
-#if defined(IMAGE_BL2) && SEPARATE_BL2_NOLOAD_REGION
+#if defined(IMAGE_BL2) && SEPARATE_BL2_NOLOAD_REGION  /* 整体条件 为 0 */
 		adrp	x0, __BL2_NOLOAD_START__
 		add	x0, x0, :lo12:__BL2_NOLOAD_START__
 		adrp	x1, __BL2_NOLOAD_END__
@@ -492,7 +492,7 @@
 		sub	x1, x1, x0
 		bl	zeromem
 
-#if USE_COHERENT_MEM
+#if USE_COHERENT_MEM  /* 整体条件 为 0 */
 		adrp	x0, __COHERENT_RAM_START__
 		add	x0, x0, :lo12:__COHERENT_RAM_START__
 		adrp	x1, __COHERENT_RAM_END_UNALIGNED__
@@ -502,7 +502,7 @@
 #endif
 
 #if defined(IMAGE_BL1) ||	\
-	(defined(IMAGE_BL2) && RESET_TO_BL2 && BL2_IN_XIP_MEM)
+	(defined(IMAGE_BL2) && RESET_TO_BL2 && BL2_IN_XIP_MEM)  /* 整体条件 为 1 */
 		adrp	x0, __DATA_RAM_START__
 		add	x0, x0, :lo12:__DATA_RAM_START__
 		adrp	x1, __DATA_ROM_START__
@@ -529,7 +529,7 @@
 	 */
 	bl	plat_set_my_stack
 
-#if STACK_PROTECTOR_ENABLED
+#if STACK_PROTECTOR_ENABLED  /* 整体条件 为 0 */
 	.if \_init_c_runtime
 	bl	update_stack_protector_canary
 	.endif /* _init_c_runtime */
