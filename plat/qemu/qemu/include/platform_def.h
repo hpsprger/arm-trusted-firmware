@@ -188,7 +188,7 @@
 
 // #define NS_IMAGE_OFFSET			(NS_DRAM0_BASE + 0x20000000)
 // #define NS_IMAGE_MAX_SIZE		(NS_DRAM0_SIZE - 0x20000000)
-#define NS_IMAGE_OFFSET			(0x200000)  //uboot 链接脚本里面的起始地址 
+#define NS_IMAGE_OFFSET			(NS_DRAM1_BASE)  //uboot 链接脚本里面的起始地址 
 #define NS_IMAGE_MAX_SIZE		(0x1400000) //uboot 镜像20M，0x200000起始的区域是映射了300M的
 
 #define PLAT_PHY_ADDR_SPACE_SIZE	(1ULL << 32)
