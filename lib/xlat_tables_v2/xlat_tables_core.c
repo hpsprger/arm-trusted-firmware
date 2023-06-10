@@ -737,15 +737,19 @@ static int mmap_add_region_check(const xlat_ctx_t *ctx, const mmap_region_t *mm)
 
 #if PLAT_XLAT_TABLES_DYNAMIC
 			if (((mm->attr & MT_DYNAMIC) != 0U) ||
-			    ((mm_cursor->attr & MT_DYNAMIC) != 0U))
+			    ((mm_cursor->attr & MT_DYNAMIC) != 0U)) {
+				printf("000-----");
 				return -EPERM;
+			}
 #endif /* PLAT_XLAT_TABLES_DYNAMIC */
 			if ((mm_cursor->base_va - mm_cursor->base_pa) !=
 							(base_va - base_pa))
+				printf("111-----");
 				return -EPERM;
 
 			if ((base_va == mm_cursor->base_va) &&
 						(size == mm_cursor->size))
+				printf("222-----");
 				return -EPERM;
 
 		} else {
@@ -763,8 +767,10 @@ static int mmap_add_region_check(const xlat_ctx_t *ctx, const mmap_region_t *mm)
 			bool separated_va = (end_va < mm_cursor->base_va) ||
 				(base_va > mm_cursor_end_va);
 
-			if (!separated_va || !separated_pa)
+			if (!separated_va || !separated_pa) {
+				printf("333-----");
 				return -EPERM;
+			}
 		}
 	}
 
