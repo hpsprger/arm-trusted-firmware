@@ -58,10 +58,10 @@
 					MT_MEMORY | MT_RW | MT_NS)
 
 #define MAP_FLASH0	MAP_REGION_FLAT(QEMU_FLASH0_BASE, QEMU_FLASH0_SIZE, \
-					MT_MEMORY | MT_RO | MT_SECURE)
+					MT_MEMORY | MT_RW | MT_SECURE)
 
 #define MAP_FLASH1	MAP_REGION_FLAT(QEMU_FLASH1_BASE, QEMU_FLASH1_SIZE, \
-					MT_MEMORY | MT_RO | MT_SECURE)
+					MT_MEMORY | MT_RW | MT_SECURE)
 
 /*
  * Table of regions for various BL stages to map using the MMU.
