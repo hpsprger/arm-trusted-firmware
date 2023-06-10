@@ -82,6 +82,10 @@
 #define NS_DRAM0_BASE			ULL(0x40000000)
 #define NS_DRAM0_SIZE			ULL(0xc0000000)
 
+//for uboot start from 0x200000 + 300M 
+#define NS_DRAM1_BASE			ULL(0x200000)
+#define NS_DRAM1_SIZE			ULL(0x12C00000)
+
 #define SEC_SRAM_BASE			0x0e000000
 #define SEC_SRAM_SIZE			0x00100000
 
@@ -182,8 +186,10 @@
 # error "Unsupported BL32_RAM_LOCATION_ID value"
 #endif
 
-#define NS_IMAGE_OFFSET			(NS_DRAM0_BASE + 0x20000000)
-#define NS_IMAGE_MAX_SIZE		(NS_DRAM0_SIZE - 0x20000000)
+// #define NS_IMAGE_OFFSET			(NS_DRAM0_BASE + 0x20000000)
+// #define NS_IMAGE_MAX_SIZE		(NS_DRAM0_SIZE - 0x20000000)
+#define NS_IMAGE_OFFSET			(0x200000)  //uboot 链接脚本里面的起始地址 
+#define NS_IMAGE_MAX_SIZE		(0x1400000) //uboot 镜像20M，0x200000起始的区域是映射了300M的
 
 #define PLAT_PHY_ADDR_SPACE_SIZE	(1ULL << 32)
 #define PLAT_VIRT_ADDR_SPACE_SIZE	(1ULL << 32)

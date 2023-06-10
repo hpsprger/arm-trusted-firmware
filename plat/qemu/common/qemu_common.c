@@ -51,6 +51,9 @@
 #define MAP_NS_DRAM0	MAP_REGION_FLAT(NS_DRAM0_BASE, NS_DRAM0_SIZE,	\
 					MT_MEMORY | MT_RW | MT_NS)
 
+#define MAP_NS_DRAM1	MAP_REGION_FLAT(NS_DRAM0_BASE, NS_DRAM1_SIZE,	\
+					MT_MEMORY | MT_RW | MT_NS)
+
 #define MAP_FLASH0	MAP_REGION_FLAT(QEMU_FLASH0_BASE, QEMU_FLASH0_SIZE, \
 					MT_MEMORY | MT_RO | MT_SECURE)
 
@@ -96,6 +99,7 @@ static const mmap_region_t plat_qemu_mmap[] = {
 	MAP_DEVICE2,
 #endif
 	MAP_NS_DRAM0,
+	MAP_NS_DRAM1,
 #if SPM_MM
 	QEMU_SP_IMAGE_MMAP,
 #else
@@ -119,6 +123,7 @@ static const mmap_region_t plat_qemu_mmap[] = {
 #endif
 #if SPM_MM
 	MAP_NS_DRAM0,
+	MAP_NS_DRAM1,
 	QEMU_SPM_BUF_EL3_MMAP,
 #elif !SPMC_AT_EL3
 	MAP_BL32_MEM,
