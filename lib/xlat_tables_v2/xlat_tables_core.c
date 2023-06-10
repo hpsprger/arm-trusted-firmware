@@ -676,7 +676,7 @@ static uintptr_t xlat_tables_map_region(xlat_ctx_t *ctx, mmap_region_t *mm,
  *   ENOMEM: There is not enough memory in the mmap array.
  *    EPERM: Region overlaps another one in an invalid way.
  */
-static int mmap_add_region_check(const xlat_ctx_t *ctx, const mmap_region_t *mm)
+static int __attribute__((optimize("O0"))) mmap_add_region_check(const xlat_ctx_t *ctx, const mmap_region_t *mm)
 {
 	unsigned long long base_pa = mm->base_pa;
 	uintptr_t base_va = mm->base_va;
