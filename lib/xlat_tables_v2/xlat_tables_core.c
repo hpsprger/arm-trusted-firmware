@@ -743,15 +743,15 @@ static int mmap_add_region_check(const xlat_ctx_t *ctx, const mmap_region_t *mm)
 			}
 #endif /* PLAT_XLAT_TABLES_DYNAMIC */
 			if ((mm_cursor->base_va - mm_cursor->base_pa) !=
-							(base_va - base_pa))
+							(base_va - base_pa)) {
 				printf("111-----");
 				return -EPERM;
-
+			}
 			if ((base_va == mm_cursor->base_va) &&
-						(size == mm_cursor->size))
+						(size == mm_cursor->size)) {
 				printf("222-----");
 				return -EPERM;
-
+			}
 		} else {
 			/*
 			 * If the regions do not have fully overlapping VAs,
