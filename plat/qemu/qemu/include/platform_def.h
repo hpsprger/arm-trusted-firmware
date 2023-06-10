@@ -216,8 +216,8 @@
 #define PLAT_QEMU_FIP_BASE		0x00040000
 #define PLAT_QEMU_FIP_MAX_SIZE		0x00400000
 
-#define DEVICE0_BASE			0x08000000
-#define DEVICE0_SIZE			0x01000000
+#define DEVICE0_BASE			GICD_BASE
+#define DEVICE0_SIZE			0x02000000
 #define DEVICE1_BASE			UART0_BASE
 #define DEVICE1_SIZE			0x00c00000
 
@@ -225,9 +225,9 @@
  * GIC related constants
  */
 
-#define GICD_BASE			0x8000000
-#define GICC_BASE			0x8010000
-#define GICR_BASE			0x80A0000
+#define GICD_BASE			0xfee00000
+#define GICC_BASE			0xfff00000
+#define GICR_BASE			0xfef00000
 
 
 #define QEMU_IRQ_SEC_SGI_0		8
