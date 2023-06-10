@@ -5,7 +5,7 @@
 #
 
 # Use the GICv2 driver on QEMU by default
-QEMU_USE_GIC_DRIVER	:= QEMU_GICV2
+QEMU_USE_GIC_DRIVER	:= QEMU_GICV3
 
 ifeq (${ARM_ARCH_MAJOR},7)
 # ARMv7 Qemu support in trusted firmware expects the Cortex-A15 model.
