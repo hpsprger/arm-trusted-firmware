@@ -83,8 +83,64 @@
 #define NS_DRAM0_SIZE			ULL(0xc0000000)
 
 //for uboot start from 0x200000 + 300M 
-#define NS_DRAM1_BASE			ULL(0x200000)
-#define NS_DRAM1_SIZE			ULL(0x12C00000)
+//映射的时候，为了避免与之前已经映射的地址空间重叠，所以在经过对各个BL的映射区域计算后，定义了下面的宏 来弥补uboot 要用的那段空间
+//#define NS_DRAM1_BASE			ULL(0x200000)
+//#define NS_DRAM1_SIZE			ULL(0x12C00000)
+/*
+#ifdef IMAGE_BL2
+static const mmap_region_t plat_qemu_mmap[] = {
+	MAP_FLASH0,      ==>  QEMU_FLASH0_BASE : 0x00000000  --- 0x04000000
+	MAP_FLASH1,      ==>  QEMU_FLASH1_BASE : 0x04000000  --- 0x08000000
+	MAP_SHARED_RAM,  ==>  SHARED_RAM_BASE : 0x0e000000  --- 0x0e001000
+	MAP_DEVICE0,     ==>  DEVICE0_BASE : 0x08000000 ---  0x09000000
+	MAP_DEVICE3,     ==>  DEVICE3_BASE : 0xfee00000 -- 0xfee00000 + 0x100000
+	MAP_DEVICE4,     ==>  DEVICE4_BASE : 0xfff00000 -- 0xfff00000 + 0x10000 
+	MAP_DEVICE5,     ==>  DEVICE5_BASE : 0xfef00000 -- 0xfef00000 + 0x100000
+#ifdef MAP_DEVICE1
+	MAP_DEVICE1,     ==>   DEVICE1_BASE  : 0xf6ff0000 ---  0xf6ff0000 + 0x00c00000
+#endif
+#ifdef MAP_DEVICE2
+	MAP_DEVICE2,     ==>   DEVICE2_BASE : ---  
+#endif
+	MAP_NS_DRAM0,    ==> NS_DRAM0_BASE :   0x40000000 ---  0x40000000 + 0xc0000000 【0x100000000】
+	MAP_NS_DRAM1,    ==> NS_DRAM1_BASE :  0x200000 -- 0x200000 + 0x12C00000【0x12E00000】 ===> 与  QEMU_FLASH0_BASE 的区间重叠了
+#if SPM_MM
+	QEMU_SP_IMAGE_MMAP, ==>   ---  
+#else
+	MAP_BL32_MEM,    ==>  BL32_MEM_BASE :  0x0e001000 ---  0x0e001000 + 0xFF000
+#endif
+	{0}
+};
+#endif
+*/
+#define NS_DRAM1_BASE_BL2   ULL(0x09000000)
+#define NS_DRAM1_SIZE_BL2   ULL(0x12C00000 + 0x200000 - 0x09000000)
+/*
+#ifdef IMAGE_BL31
+static const mmap_region_t plat_qemu_mmap[] = {
+	MAP_SHARED_RAM, ==>  SHARED_RAM_BASE : 0x0e000000  --- 0x0e001000
+	MAP_DEVICE0,          ==>  DEVICE0_BASE : 0x08000000 ---  0x09000000
+#ifdef MAP_DEVICE1
+	MAP_DEVICE1,          ==>   DEVICE1_BASE  : 0xf6ff0000 ---  0xf6ff0000 + 0x00c00000
+#endif
+#ifdef MAP_DEVICE2
+	MAP_DEVICE2,          ==>   DEVICE2_BASE : ---  
+#endif
+#if SPM_MM
+	MAP_NS_DRAM0,    
+	QEMU_SPM_BUF_EL3_MMAP,
+#elif !SPMC_AT_EL3
+	MAP_BL32_MEM, ==>  BL32_MEM_BASE :  0x0e001000 ---  0x0e001000 + 0xFF000
+#endif
+	{0}
+};
+#endif
+*/
+#define NS_DRAM1_BASE_BL31  ULL(0x200000)
+#define NS_DRAM1_SIZE_BL31  ULL(0x12C00000)
+
+//#define NS_DRAM1_BASE			ULL(0x200000)
+//#define NS_DRAM1_SIZE			ULL(0x12C00000)
 
 #define SEC_SRAM_BASE			0x0e000000
 #define SEC_SRAM_SIZE			0x00100000
