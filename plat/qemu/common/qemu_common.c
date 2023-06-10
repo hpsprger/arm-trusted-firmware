@@ -19,6 +19,16 @@
 					DEVICE0_SIZE,			\
 					MT_DEVICE | MT_RW | MT_SECURE)
 
+#define MAP_DEVICE3	MAP_REGION_FLAT(DEVICE3_BASE,			\
+					DEVICE3_SIZE,			\
+					MT_DEVICE | MT_RW | MT_SECURE)
+#define MAP_DEVICE4	MAP_REGION_FLAT(DEVICE4_BASE,			\
+					DEVICE4_SIZE,			\
+					MT_DEVICE | MT_RW | MT_SECURE)
+#define MAP_DEVICE5	MAP_REGION_FLAT(DEVICE5_BASE,			\
+					DEVICE5_SIZE,			\
+					MT_DEVICE | MT_RW | MT_SECURE)
+
 #ifdef DEVICE1_BASE
 #define MAP_DEVICE1	MAP_REGION_FLAT(DEVICE1_BASE,			\
 					DEVICE1_SIZE,			\
@@ -58,6 +68,9 @@ static const mmap_region_t plat_qemu_mmap[] = {
 	MAP_FLASH1,
 	MAP_SHARED_RAM,
 	MAP_DEVICE0,
+	MAP_DEVICE3,
+	MAP_DEVICE4,
+	MAP_DEVICE5,
 #ifdef MAP_DEVICE1
 	MAP_DEVICE1,
 #endif
@@ -73,6 +86,9 @@ static const mmap_region_t plat_qemu_mmap[] = {
 	MAP_FLASH1,
 	MAP_SHARED_RAM,
 	MAP_DEVICE0,
+	MAP_DEVICE3,
+	MAP_DEVICE4,
+	MAP_DEVICE5,
 #ifdef MAP_DEVICE1
 	MAP_DEVICE1,
 #endif
@@ -92,6 +108,9 @@ static const mmap_region_t plat_qemu_mmap[] = {
 static const mmap_region_t plat_qemu_mmap[] = {
 	MAP_SHARED_RAM,
 	MAP_DEVICE0,
+	MAP_DEVICE3,
+	MAP_DEVICE4,
+	MAP_DEVICE5,
 #ifdef MAP_DEVICE1
 	MAP_DEVICE1,
 #endif
@@ -111,6 +130,9 @@ static const mmap_region_t plat_qemu_mmap[] = {
 static const mmap_region_t plat_qemu_mmap[] = {
 	MAP_SHARED_RAM,
 	MAP_DEVICE0,
+	MAP_DEVICE3,
+	MAP_DEVICE4,
+	MAP_DEVICE5,
 #ifdef MAP_DEVICE1
 	MAP_DEVICE1,
 #endif
