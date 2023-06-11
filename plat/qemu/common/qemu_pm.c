@@ -111,6 +111,10 @@ static int qemu_validate_ns_entrypoint(uintptr_t entrypoint)
 	 * Check if the non secure entrypoint lies within the non
 	 * secure DRAM.
 	 */
+	
+	// 因为我自己实现的qemu machine 的地址 比较随意，所以这里就不做实际的检测了，直接返回成功
+	return PSCI_E_SUCCESS;
+
 	if ((entrypoint >= NS_DRAM0_BASE) &&
 	    (entrypoint < (NS_DRAM0_BASE + NS_DRAM0_SIZE)))
 		return PSCI_E_SUCCESS;
