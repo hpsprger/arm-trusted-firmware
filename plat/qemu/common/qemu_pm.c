@@ -148,7 +148,11 @@ static int qemu_pwr_domain_on(u_register_t mpidr)
 	uint64_t *hold_base = (uint64_t *)PLAT_QEMU_HOLD_BASE;
 
 	hold_base[pos] = PLAT_QEMU_HOLD_STATE_GO;
-	sev();
+	sev(); //会唤醒所有的WFE 下的CPU
+
+	// 这里准备给芯片的两个特定的寄存器写数据，通知芯片层面 唤醒 从核 并 从指定的地址 启动从核
+	// [RK3399_PMU_SGRF]  =    { 0xff330000,   RK3399_64K },
+    mmio_write_32(RK3399_PMU_SGRF_BASE + RK3399_SECONDARY_CORE_KICK_OFFSET, RK3399_SECONDARY_CORE_RUNNING);
 
 	return rc;
 }
