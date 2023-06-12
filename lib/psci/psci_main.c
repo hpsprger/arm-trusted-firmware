@@ -39,8 +39,8 @@ int psci_cpu_on(u_register_t target_cpu,
 	if (rc != PSCI_E_SUCCESS)
 		return rc;
 
-	mmio_write_32(RK3399_PMU_SGRF_BASE + RK3399_SECONDARY_CORE_ID_START_PA_OFFSET, entrypoint);
-	mmio_write_32(RK3399_PMU_SGRF_BASE + RK3399_SECONDARY_CORE_ID_OFFSET, target_cpu);
+	*(volatile unsigned int *)(RK3399_PMU_SGRF_BASE + RK3399_SECONDARY_CORE_ID_START_PA_OFFSET) = entrypoint;
+	*(volatile unsigned int *)(RK3399_PMU_SGRF_BASE + RK3399_SECONDARY_CORE_ID_OFFSET) = target_cpu;
 
 	/*
 	 * To turn this cpu on, specify which power

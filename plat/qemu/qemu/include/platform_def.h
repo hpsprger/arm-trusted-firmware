@@ -139,10 +139,6 @@ static const mmap_region_t plat_qemu_mmap[] = {
 #define NS_DRAM1_BASE_BL31  ULL(0x200000)
 #define NS_DRAM1_SIZE_BL31  ULL(0x12C00000)
 
-#define mmio_read_32(c)	({unsigned int __v = \
-				(*(volatile unsigned int *)(c)); __v; })
-#define mmio_write_32(c, v)	((*(volatile unsigned int *)(c)) = (v))
-
 // 现在从核不起来，在qemu底层，因为qemu的几个从核对应的线程，这时没有继续往下跑，等待设置PC指针呢！！！所以这里准备写一个寄存器，通知machine层级的代码去 让 从核对应的CPU的线程 继续往下跑！！！！！！！
 // [RK3399_PMU_SGRF]  =    { 0xff330000,   RK3399_64K }
 #define RK3399_PMU_SGRF_BASE                       0xff330000
