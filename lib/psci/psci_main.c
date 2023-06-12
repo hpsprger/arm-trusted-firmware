@@ -40,7 +40,7 @@ int psci_cpu_on(u_register_t target_cpu,
 		return rc;
 
 	// ATF bl31_warm_entrypoint ==> 1:1 映射 ==> 0xe0a6538
-	*(volatile unsigned int *)(RK3399_PMU_SGRF_BASE + RK3399_SECONDARY_CORE_ID_START_PA_OFFSET) = bl31_warm_entrypoint;
+	*(volatile unsigned int *)(RK3399_PMU_SGRF_BASE + RK3399_SECONDARY_CORE_ID_START_PA_OFFSET) = &bl31_warm_entrypoint;
 	*(volatile unsigned int *)(RK3399_PMU_SGRF_BASE + RK3399_SECONDARY_CORE_ID_OFFSET) = target_cpu;
 
 	/*
