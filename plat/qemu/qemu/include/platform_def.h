@@ -143,8 +143,8 @@ static const mmap_region_t plat_qemu_mmap[] = {
 // [RK3399_PMU_SGRF]  =    { 0xff330000,   RK3399_64K }
 #define RK3399_PMU_SGRF_BASE                       0xff330000
 #define RK3399_SECONDARY_CORE_ID_OFFSET            0X0
-#define RK3399_SECONDARY_CORE_ID_START_PA_OFFSET   0X1
-#define RK3399_SECONDARY_CORE_KICK_OFFSET          0X2
+#define RK3399_SECONDARY_CORE_ID_START_PA_OFFSET   0X4
+#define RK3399_SECONDARY_CORE_KICK_OFFSET          0X8
 #define RK3399_SECONDARY_CORE_RUNNING              0X1
 #define RK3399_SECONDARY_CORE_STOP                 0X0
 
