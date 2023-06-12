@@ -18,6 +18,9 @@
 
 #include "psci_private.h"
 
+
+extern void bl31_warm_entrypoint(void);
+
 /*******************************************************************************
  * PSCI frontend api for servicing SMCs. Described in the PSCI spec.
  ******************************************************************************/
