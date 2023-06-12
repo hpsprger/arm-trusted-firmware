@@ -148,7 +148,7 @@ static const mmap_region_t plat_qemu_mmap[] = {
 #define RK3399_SECONDARY_CORE_RUNNING              0X1
 #define RK3399_SECONDARY_CORE_STOP                 0X0
 
-#define DEVICE_PMUSGRF_BASE   ULL(RK3399_PMU_SGRF_BASE)
+#define DEVICE_PMUSGRF_BASE   RK3399_PMU_SGRF_BASE
 #define DEVICE_PMUSGRF_SIZE   ULL(0x10000)
 
 //#define NS_DRAM1_BASE			ULL(0x200000)
