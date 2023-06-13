@@ -37,7 +37,9 @@
 CASSERT(((TWED_DELAY & ~SCR_TWEDEL_MASK) == 0U), assert_twed_delay_value_check);
 #endif /* ENABLE_FEAT_TWED */
 
+#if IMAGE_BL31
 uint32_t g_psci_target_cpu_idx;
+#endif 
 
 static void manage_extensions_secure(cpu_context_t *ctx);
 
@@ -305,9 +307,10 @@ static void setup_context_common(cpu_context_t *ctx, const entry_point_info_t *e
 	u_register_t scr_el3;
 	el3_state_t *state;
 	gp_regs_t *gp_regs;
-	unsigned long isolate_cpu_idex; 
-	unsigned long isolate_cpu_start_pa;
-
+#if IMAGE_BL31
+	unsigned long isolate_cpu_idx = 0;
+	unsigned long isolate_cpu_start_pa = 0;
+#endif
 	/* Clear any residual register values from the context */
 	zeromem(ctx, sizeof(*ctx));
 
@@ -437,18 +440,18 @@ static void setup_context_common(cpu_context_t *ctx, const entry_point_info_t *e
 	write_ctx_reg(state, CTX_ELR_EL3, ep->pc);
 	write_ctx_reg(state, CTX_SPSR_EL3, ep->spsr);
 	
-	isolate_cpu_idex = *(volatile unsigned long *)(RK3399_PMU_PRVDATA_BASE + RK3399_SECONDARY_ISOLATE_CPU_OFFSET);
-
-	if (isolate_cpu_idex != 0xffffffffffffffff)
+#if IMAGE_BL31
+	isolate_cpu_idx = *(volatile unsigned long *)(RK3399_PMU_PRVDATA_BASE + RK3399_SECONDARY_ISOLATE_CPU_OFFSET);
+	if (isolate_cpu_idx != 0xffffffffffffffff)
 	{
 		isolate_cpu_start_pa = *(volatile unsigned long *)(RK3399_PMU_PRVDATA_BASE + RK3399_SECONDARY_ISOLATE_CPU_STARTPA_OFFSET);
-		printf("ATF ==> isolate_cpu_idex = 0x%lx isolate_cpu_start_pa=0x%lx  g_psci_target_cpu_idx=%x \r", isolate_cpu_idex, isolate_cpu_start_pa, g_psci_target_cpu_idx);
-		if (g_psci_target_cpu_idx == isolate_cpu_idex) {
+		printf("ATF ==> isolate_cpu_idx = 0x%lx isolate_cpu_start_pa=0x%lx  g_psci_target_cpu_idx=%x \r", isolate_cpu_idx, isolate_cpu_start_pa, g_psci_target_cpu_idx);
+		if (g_psci_target_cpu_idx == isolate_cpu_idx) {
 			printf("ATF ==> set done!!! \r");
 			write_ctx_reg(state, CTX_ELR_EL3, isolate_cpu_start_pa);
 		}
 	}
-
+#endif
 	/*
 	 * Store the X0-X7 value from the entrypoint into the context
 	 * Use memcpy as we are in control of the layout of the structures
