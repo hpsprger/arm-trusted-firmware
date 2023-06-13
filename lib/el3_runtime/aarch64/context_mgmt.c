@@ -309,7 +309,7 @@ static void setup_context_common(cpu_context_t *ctx, const entry_point_info_t *e
 	gp_regs_t *gp_regs;
 
 #if IMAGE_BL31
-	unsigned long isolate_cpu_idx = 0;
+	unsigned int isolate_cpu_idx = 0;
 	unsigned long isolate_cpu_start_pa = 0;
 #endif
 
@@ -447,7 +447,7 @@ static void setup_context_common(cpu_context_t *ctx, const entry_point_info_t *e
 	if (isolate_cpu_idx != 0xffffffffffffffff)
 	{
 		isolate_cpu_start_pa = *(volatile unsigned long *)(RK3399_PMU_PRVDATA_BASE + RK3399_SECONDARY_ISOLATE_CPU_STARTPA_OFFSET);
-		printf("ATF setup_context_common ==> isolate_cpu_idx = 0x%lx isolate_cpu_start_pa=0x%lx  g_psci_target_cpu_idx=%x \r", isolate_cpu_idx, isolate_cpu_start_pa, g_psci_target_cpu_idx);
+		printf("ATF  ==> isolate_cpuidx=0x%x isolate_pa=0x%lx  target_cpuidx=%x \r", isolate_cpu_idx, isolate_cpu_start_pa, g_psci_target_cpu_idx);
 		if (g_psci_target_cpu_idx == isolate_cpu_idx) {
 			printf("ATF setup_context_common ==> set done!!! \r");
 			write_ctx_reg(state, CTX_ELR_EL3, isolate_cpu_start_pa);
