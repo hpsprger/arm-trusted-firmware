@@ -23,6 +23,7 @@ void atf_power_on_cpu()
 {
 	unsigned long isolate_cpu_idx;
 	unsigned long isolate_cpu_start_pa;
+	int rc;
 
 	isolate_cpu_idx = *(volatile unsigned long *)(RK3399_PMU_PRVDATA_BASE + RK3399_SECONDARY_ISOLATE_CPU_OFFSET);
 
