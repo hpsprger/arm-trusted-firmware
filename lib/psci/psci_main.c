@@ -19,7 +19,7 @@
 #include "psci_private.h"
 
 #if IMAGE_BL31
-void atf_power_on_cpu()
+void __attribute__((optimize("O0")))  atf_power_on_cpu()
 {
 	unsigned long isolate_cpu_idx;
 	unsigned long isolate_cpu_start_pa = 0;
@@ -32,14 +32,14 @@ void atf_power_on_cpu()
 	//if (rc != PSCI_E_SUCCESS)
 	//	return;
 
-	printf("atf_power_on_cpu ==> isolate_cpu_idx = 0x%lx isolate_cpu_start_pa=0x%lx \r", isolate_cpu_idx, isolate_cpu_start_pa);
+	//printf("atf_power_on_cpu ==> isolate_cpu_idx = 0x%lx isolate_cpu_start_pa=0x%lx \r", isolate_cpu_idx, isolate_cpu_start_pa);
 
 	if (isolate_cpu_idx != 0xffffffffffffffff)
 	{
 		*(volatile unsigned int *)(RK3399_PMU_PRVDATA_BASE + RK3399_SECONDARY_CORE_ID_START_PA_OFFSET) = isolate_cpu_start_pa;
 		*(volatile unsigned int *)(RK3399_PMU_PRVDATA_BASE + RK3399_SECONDARY_CORE_ID_OFFSET) = isolate_cpu_idx;
 		*(volatile unsigned int *)(RK3399_PMU_PRVDATA_BASE + RK3399_SECONDARY_CORE_KICK_OFFSET) = RK3399_SECONDARY_CORE_RUNNING;
-		printf("atf_power_on_cpu ==> power on done \n");
+		//printf("atf_power_on_cpu ==> power on done \n");
 	}
 
 }
