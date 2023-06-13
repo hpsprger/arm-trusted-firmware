@@ -112,6 +112,7 @@ typedef struct entry_point_info {
 	uintptr_t lr_svc;
 	aapcs32_params_t args;
 #endif
+	uint32_t cpu_idx;
 } entry_point_info_t;
 
 #endif /*__ASSEMBLER__*/

@@ -152,7 +152,7 @@ static int qemu_pwr_domain_on(u_register_t mpidr)
 
 	// 这里准备给芯片的两个特定的寄存器写数据，通知芯片层面 唤醒 从核 并 从指定的地址 启动从核
 	// [RK3399_PMU_SGRF]  =    { 0xff330000,   RK3399_64K },
-    *(volatile unsigned int *)(RK3399_PMU_SGRF_BASE + RK3399_SECONDARY_CORE_KICK_OFFSET) = RK3399_SECONDARY_CORE_RUNNING;
+    *(volatile unsigned int *)(RK3399_PMU_PRVDATA_BASE + RK3399_SECONDARY_CORE_KICK_OFFSET) = RK3399_SECONDARY_CORE_RUNNING;
 	return rc;
 }
 
