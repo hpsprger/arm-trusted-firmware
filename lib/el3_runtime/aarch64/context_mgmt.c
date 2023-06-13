@@ -436,10 +436,11 @@ static void setup_context_common(cpu_context_t *ctx, const entry_point_info_t *e
 	write_ctx_reg(state, CTX_SCR_EL3, scr_el3);
 	write_ctx_reg(state, CTX_ELR_EL3, ep->pc);
 	write_ctx_reg(state, CTX_SPSR_EL3, ep->spsr);
+	
+	isolate_cpu_idex = *(volatile unsigned long *)(RK3399_PMU_PRVDATA_BASE + RK3399_SECONDARY_ISOLATE_CPU_OFFSET);
 
 	if (isolate_cpu_idex != 0xffffffffffffffff)
 	{
-		isolate_cpu_idex = *(volatile unsigned long *)(RK3399_PMU_PRVDATA_BASE + RK3399_SECONDARY_ISOLATE_CPU_OFFSET);
 		isolate_cpu_start_pa = *(volatile unsigned long *)(RK3399_PMU_PRVDATA_BASE + RK3399_SECONDARY_ISOLATE_CPU_STARTPA_OFFSET);
 		printf("ATF ==> isolate_cpu_idex = 0x%lx isolate_cpu_start_pa=0x%lx  g_psci_target_cpu_idx=%x \r", isolate_cpu_idex, isolate_cpu_start_pa, g_psci_target_cpu_idx);
 		if (g_psci_target_cpu_idx == isolate_cpu_idex) {
