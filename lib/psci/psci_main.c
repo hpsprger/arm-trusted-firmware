@@ -28,7 +28,7 @@ void atf_power_on_cpu()
 
 	rc = psci_validate_mpidr(isolate_cpu_idx);
 	if (rc != PSCI_E_SUCCESS)
-		return PSCI_E_INVALID_PARAMS;
+		return;
 
 	if (isolate_cpu_idx != 0xffffffffffffffff)
 	{
