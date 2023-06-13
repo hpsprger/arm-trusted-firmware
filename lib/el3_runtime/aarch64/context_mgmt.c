@@ -37,6 +37,8 @@
 CASSERT(((TWED_DELAY & ~SCR_TWEDEL_MASK) == 0U), assert_twed_delay_value_check);
 #endif /* ENABLE_FEAT_TWED */
 
+uint32_t g_psci_target_cpu_idx;
+
 static void manage_extensions_secure(cpu_context_t *ctx);
 
 static void setup_el1_context(cpu_context_t *ctx, const struct entry_point_info *ep)
@@ -439,8 +441,8 @@ static void setup_context_common(cpu_context_t *ctx, const entry_point_info_t *e
 	{
 		isolate_cpu_idex = *(volatile unsigned long *)(RK3399_PMU_PRVDATA_BASE + RK3399_SECONDARY_ISOLATE_CPU_OFFSET);
 		isolate_cpu_start_pa = *(volatile unsigned long *)(RK3399_PMU_PRVDATA_BASE + RK3399_SECONDARY_ISOLATE_CPU_STARTPA_OFFSET);
-		printf("ATF ==> isolate_cpu_idex = 0x%lx isolate_cpu_start_pa=0x%lx  ep->cpu_idx=%x \r", isolate_cpu_idex, isolate_cpu_start_pa, ep->cpu_idx);
-		if (ep->cpu_idx == isolate_cpu_idex) {
+		printf("ATF ==> isolate_cpu_idex = 0x%lx isolate_cpu_start_pa=0x%lx  g_psci_target_cpu_idx=%x \r", isolate_cpu_idex, isolate_cpu_start_pa, g_psci_target_cpu_idx);
+		if (g_psci_target_cpu_idx == isolate_cpu_idex) {
 			printf("ATF ==> set done!!! \r");
 			write_ctx_reg(state, CTX_ELR_EL3, isolate_cpu_start_pa);
 		}
@@ -612,7 +614,7 @@ void cm_init_context_by_index(unsigned int cpu_idx,
 {
 	cpu_context_t *ctx;
 	ctx = cm_get_context_by_index(cpu_idx, GET_SECURITY_STATE(ep->h.attr));
-	ep->cpu_idx = cpu_idx;
+	g_psci_target_cpu_idx = cpu_idx;
 	cm_setup_context(ctx, ep);
 }
 
