@@ -31,16 +31,9 @@
 
 #pragma weak plat_ea_handler = plat_default_ea_handler
 
-#if IMAGE_BL31
-void atf_power_on_cpu();
-#endif 
-
 void bl31_plat_runtime_setup(void)
 {
 	console_switch_state(CONSOLE_FLAG_RUNTIME);
-#if IMAGE_BL31
-	atf_power_on_cpu();
-#endif 
 }
 
 /*
