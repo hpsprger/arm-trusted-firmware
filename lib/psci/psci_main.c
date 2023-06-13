@@ -18,6 +18,29 @@
 
 #include "psci_private.h"
 
+#if IMAGE_BL31
+void atf_power_on_cpu()
+{
+	unsigned long isolate_cpu_idx;
+	unsigned long isolate_cpu_start_pa;
+
+	isolate_cpu_idx = *(volatile unsigned long *)(RK3399_PMU_PRVDATA_BASE + RK3399_SECONDARY_ISOLATE_CPU_OFFSET);
+
+	rc = psci_validate_mpidr(isolate_cpu_idx);
+	if (rc != PSCI_E_SUCCESS)
+		return PSCI_E_INVALID_PARAMS;
+
+	if (isolate_cpu_idx != 0xffffffffffffffff)
+	{
+		isolate_cpu_start_pa = *(volatile unsigned long *)(RK3399_PMU_PRVDATA_BASE + RK3399_SECONDARY_ISOLATE_CPU_STARTPA_OFFSET);
+		*(volatile unsigned int *)(RK3399_PMU_PRVDATA_BASE + RK3399_SECONDARY_CORE_ID_START_PA_OFFSET) = isolate_cpu_start_pa;
+		*(volatile unsigned int *)(RK3399_PMU_PRVDATA_BASE + RK3399_SECONDARY_CORE_ID_OFFSET) = isolate_cpu_idx;
+		*(volatile unsigned int *)(RK3399_PMU_PRVDATA_BASE + RK3399_SECONDARY_CORE_KICK_OFFSET) = RK3399_SECONDARY_CORE_RUNNING;
+	}
+
+	printf("atf_power_on_cpu ==> isolate_cpu_idx = 0x%lx isolate_cpu_start_pa=0x%lx \r", isolate_cpu_idx, isolate_cpu_start_pa);
+}
+#endif
 
 extern void bl31_warm_entrypoint(void);
 
