@@ -37,9 +37,11 @@
 CASSERT(((TWED_DELAY & ~SCR_TWEDEL_MASK) == 0U), assert_twed_delay_value_check);
 #endif /* ENABLE_FEAT_TWED */
 
+#if ROCKLLEE_NEW_SCHEDULE
 #if IMAGE_BL31
 uint32_t g_psci_target_cpu_idx;
 #endif 
+#endif
 
 static void manage_extensions_secure(cpu_context_t *ctx);
 
@@ -307,10 +309,14 @@ static void setup_context_common(cpu_context_t *ctx, const entry_point_info_t *e
 	u_register_t scr_el3;
 	el3_state_t *state;
 	gp_regs_t *gp_regs;
+
+#if ROCKLLEE_NEW_SCHEDULE
 #if IMAGE_BL31
 	unsigned long isolate_cpu_idx = 0;
 	unsigned long isolate_cpu_start_pa = 0;
 #endif
+#endif
+
 	/* Clear any residual register values from the context */
 	zeromem(ctx, sizeof(*ctx));
 
@@ -439,7 +445,8 @@ static void setup_context_common(cpu_context_t *ctx, const entry_point_info_t *e
 	write_ctx_reg(state, CTX_SCR_EL3, scr_el3);
 	write_ctx_reg(state, CTX_ELR_EL3, ep->pc);
 	write_ctx_reg(state, CTX_SPSR_EL3, ep->spsr);
-	
+
+#if ROCKLLEE_NEW_SCHEDULE
 #if IMAGE_BL31
 	isolate_cpu_idx = *(volatile unsigned long *)(RK3399_PMU_PRVDATA_BASE + RK3399_SECONDARY_ISOLATE_CPU_OFFSET);
 	if (isolate_cpu_idx != 0xffffffffffffffff)
@@ -452,6 +459,8 @@ static void setup_context_common(cpu_context_t *ctx, const entry_point_info_t *e
 		}
 	}
 #endif
+#endif
+
 	/*
 	 * Store the X0-X7 value from the entrypoint into the context
 	 * Use memcpy as we are in control of the layout of the structures
@@ -618,8 +627,10 @@ void cm_init_context_by_index(unsigned int cpu_idx,
 {
 	cpu_context_t *ctx;
 	ctx = cm_get_context_by_index(cpu_idx, GET_SECURITY_STATE(ep->h.attr));
+#if ROCKLLEE_NEW_SCHEDULE
 #if IMAGE_BL31
 	g_psci_target_cpu_idx = cpu_idx;
+#endif
 #endif
 	cm_setup_context(ctx, ep);
 }
