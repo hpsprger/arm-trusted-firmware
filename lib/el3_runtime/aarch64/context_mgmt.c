@@ -618,7 +618,9 @@ void cm_init_context_by_index(unsigned int cpu_idx,
 {
 	cpu_context_t *ctx;
 	ctx = cm_get_context_by_index(cpu_idx, GET_SECURITY_STATE(ep->h.attr));
+#if IMAGE_BL31
 	g_psci_target_cpu_idx = cpu_idx;
+#endif
 	cm_setup_context(ctx, ep);
 }
 
